@@ -2,7 +2,6 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { PrismaLambdaAppStack } from '../lib/prisma-lambda-app-stack';
-import { PrismaLambdaApp2Stack } from '../lib/prisma-lambda-app2-stack';
 
 const app = new cdk.App();
 // eslint-disable-next-line no-new
@@ -18,5 +17,3 @@ new PrismaLambdaAppStack(app, 'PrismaLambdaAppStack', {
   // env: { account: '123456789012', region: 'us-east-1' },
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
-// eslint-disable-next-line no-new
-new PrismaLambdaApp2Stack(app, 'PrismaLambdaApp2Stack', {});

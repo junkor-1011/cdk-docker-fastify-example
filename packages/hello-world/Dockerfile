@@ -1,11 +1,10 @@
 FROM public.ecr.aws/lambda/nodejs:16
 
 COPY app.js package*.json ./
-# COPY pnpm-lock.yaml ./
+COPY pnpm-lock.yaml ./
 
 RUN corepack enable pnpm
-# RUN pnpm install --frozen-lockfile -P
-RUN pnpm install -P
+RUN pnpm install --frozen-lockfile -P
 # If you are building your code for production, instead include a package-lock.json file on this directory and use:
 # RUN npm ci --production
 

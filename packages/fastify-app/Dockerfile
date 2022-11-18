@@ -1,4 +1,5 @@
-FROM node:18-bullseye-slim as node
+# FROM node:18-bullseye-slim as node
+FROM public.ecr.aws/docker/library/node:18-slim as node
 ENV PNPM_VERSION=7.16.1
 RUN npm uninstall --global yarn && \
     corepack disable && \
@@ -17,7 +18,9 @@ RUN pnpm install --frozen-lockfile --ignore-scripts && \
     # pnpm install --production --ignore-scripts && \
     # pnpm cache clean
 
-FROM node:18-bullseye-slim as base
+# FROM node:18-bullseye-slim as base
+FROM public.ecr.aws/docker/library/node:18-slim as base
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.5.0 /lambda-adapter /opt/extensions/lambda-adapter
 
 ENV TINI_VERSION 0.19.0-1
 # ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
