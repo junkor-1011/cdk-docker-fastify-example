@@ -38,6 +38,57 @@ exports[`snapshot test 1`] = `
     },
   },
   "Resources": {
+    "fastapiImageFunction71E77DE5": {
+      "DependsOn": [
+        "fastapiImageFunctionServiceRole3A220E2F",
+      ],
+      "Properties": {
+        "Code": {
+          "ImageUri": {
+            "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:d2f382c3e5baab6d345d6794b2dc5dea4602d8ce5bf11ce319e6783ae7689e58",
+          },
+        },
+        "PackageType": "Image",
+        "Role": {
+          "Fn::GetAtt": [
+            "fastapiImageFunctionServiceRole3A220E2F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "fastapiImageFunctionServiceRole3A220E2F": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "fastifyAppApi4B7A160F": {
       "Properties": {
         "Name": "fastifyAppApi",
@@ -93,9 +144,15 @@ exports[`snapshot test 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "fastifyAppApiDeployment35BD0E1Ed559b1d581627fcd1d3ef8f15b29cad8": {
+    "fastifyAppApiDeployment35BD0E1E1cfbf9cf04cec90152fdea44ea2c829c": {
       "DependsOn": [
+        "fastifyAppApidocsGET1C248D03",
+        "fastifyAppApidocsD9FC8D61",
         "fastifyAppApiGET26ABCC2C",
+        "fastifyAppApihelloGET81C51A2A",
+        "fastifyAppApihello6DEC7AB8",
+        "fastifyAppApiopenapijsonGET015B7175",
+        "fastifyAppApiopenapijsonAEB2E867",
         "fastifyAppApiuseridDELETEC4DEADF2",
         "fastifyAppApiuseridGET1F4C0B21",
         "fastifyAppApiuseridPATCHE922D388",
@@ -119,7 +176,7 @@ exports[`snapshot test 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "fastifyAppApiDeployment35BD0E1Ed559b1d581627fcd1d3ef8f15b29cad8",
+          "Ref": "fastifyAppApiDeployment35BD0E1E1cfbf9cf04cec90152fdea44ea2c829c",
         },
         "RestApiId": {
           "Ref": "fastifyAppApi4B7A160F",
@@ -150,7 +207,7 @@ exports[`snapshot test 1`] = `
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "helloImageFunction7B41B444",
+                    "fastapiImageFunction71E77DE5",
                     "Arn",
                   ],
                 },
@@ -176,7 +233,7 @@ exports[`snapshot test 1`] = `
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "helloImageFunction7B41B444",
+            "fastapiImageFunction71E77DE5",
             "Arn",
           ],
         },
@@ -217,7 +274,7 @@ exports[`snapshot test 1`] = `
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "helloImageFunction7B41B444",
+            "fastapiImageFunction71E77DE5",
             "Arn",
           ],
         },
@@ -243,6 +300,405 @@ exports[`snapshot test 1`] = `
                 "Ref": "fastifyAppApi4B7A160F",
               },
               "/test-invoke-stage/GET/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "fastifyAppApidocsD9FC8D61": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "fastifyAppApi4B7A160F",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "docs",
+        "RestApiId": {
+          "Ref": "fastifyAppApi4B7A160F",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "fastifyAppApidocsGET1C248D03": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "fastapiImageFunction71E77DE5",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "fastifyAppApidocsD9FC8D61",
+        },
+        "RestApiId": {
+          "Ref": "fastifyAppApi4B7A160F",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "fastifyAppApidocsGETApiPermissionTestStackfastifyAppApi1F207F31GETdocs9AFED939": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "fastapiImageFunction71E77DE5",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "fastifyAppApi4B7A160F",
+              },
+              "/",
+              {
+                "Ref": "fastifyAppApiDeploymentStageprod9CC17FB8",
+              },
+              "/GET/docs",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "fastifyAppApidocsGETApiPermissionTestTestStackfastifyAppApi1F207F31GETdocs9EBFC34E": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "fastapiImageFunction71E77DE5",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "fastifyAppApi4B7A160F",
+              },
+              "/test-invoke-stage/GET/docs",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "fastifyAppApihello6DEC7AB8": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "fastifyAppApi4B7A160F",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "hello",
+        "RestApiId": {
+          "Ref": "fastifyAppApi4B7A160F",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "fastifyAppApihelloGET81C51A2A": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "helloImageFunction7B41B444",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "fastifyAppApihello6DEC7AB8",
+        },
+        "RestApiId": {
+          "Ref": "fastifyAppApi4B7A160F",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "fastifyAppApihelloGETApiPermissionTestStackfastifyAppApi1F207F31GEThello6A31BB78": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "helloImageFunction7B41B444",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "fastifyAppApi4B7A160F",
+              },
+              "/",
+              {
+                "Ref": "fastifyAppApiDeploymentStageprod9CC17FB8",
+              },
+              "/GET/hello",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "fastifyAppApihelloGETApiPermissionTestTestStackfastifyAppApi1F207F31GEThello9174BE80": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "helloImageFunction7B41B444",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "fastifyAppApi4B7A160F",
+              },
+              "/test-invoke-stage/GET/hello",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "fastifyAppApiopenapijsonAEB2E867": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "fastifyAppApi4B7A160F",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "openapi.json",
+        "RestApiId": {
+          "Ref": "fastifyAppApi4B7A160F",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "fastifyAppApiopenapijsonGET015B7175": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "fastapiImageFunction71E77DE5",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "fastifyAppApiopenapijsonAEB2E867",
+        },
+        "RestApiId": {
+          "Ref": "fastifyAppApi4B7A160F",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "fastifyAppApiopenapijsonGETApiPermissionTestStackfastifyAppApi1F207F31GETopenapijsonB6E36A3B": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "fastapiImageFunction71E77DE5",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "fastifyAppApi4B7A160F",
+              },
+              "/",
+              {
+                "Ref": "fastifyAppApiDeploymentStageprod9CC17FB8",
+              },
+              "/GET/openapi.json",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "fastifyAppApiopenapijsonGETApiPermissionTestTestStackfastifyAppApi1F207F31GETopenapijsonDCFB69ED": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "fastapiImageFunction71E77DE5",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "fastifyAppApi4B7A160F",
+              },
+              "/test-invoke-stage/GET/openapi.json",
             ],
           ],
         },
