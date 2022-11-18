@@ -22,21 +22,22 @@ RUN pnpm install --frozen-lockfile --ignore-scripts && \
 FROM public.ecr.aws/docker/library/node:18-slim as base
 COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.5.0 /lambda-adapter /opt/extensions/lambda-adapter
 
-ENV TINI_VERSION 0.19.0-1
+# ENV TINI_VERSION 0.19.0-1
 # ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
 # RUN chmod +x /usr/bin/tini
-RUN apt-get update && \
-    apt-get -qq install -y --no-install-recommends \
-    tini=${TINI_VERSION} && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && \
+#     apt-get -qq install -y --no-install-recommends \
+#     tini=${TINI_VERSION} && \
+#     rm -rf /var/lib/apt/lists/*
 EXPOSE 3000
 
 COPY --from=node --chown=node:node /app/dist/ /app/
 COPY --from=node --chown=node:node /app/prisma/schema.prisma /app/
 
-USER node
+# USER node
 ENV STAGE=PRODUCTION
+ENV PORT=3000
 WORKDIR /app
 
-ENTRYPOINT ["/usr/bin/tini", "--"]
+# ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["node", "app.js"]

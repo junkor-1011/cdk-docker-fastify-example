@@ -58,35 +58,10 @@ export class PrismaLambdaAppStack extends Stack {
       },
     });
 
-    const helloLambda = new lambda.DockerImageFunction(this, 'helloImageFunction', {
-      code: lambda.DockerImageCode.fromImageAsset('packages/hello-world'),
-    });
-
-    const fastapiLambda = new lambda.DockerImageFunction(this, 'fastapiImageFunction', {
-      code: lambda.DockerImageCode.fromImageAsset('assets/fastapi-app'),
-    });
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const lambdaApi = new apigateway.LambdaRestApi(this, 'fastifyAppApi', {
       handler: fastifyAppLambda,
-      proxy: false,
+      proxy: true,
     });
-    const fastapiIntegration = new apigateway.LambdaIntegration(fastapiLambda);
-    lambdaApi.root.addMethod('GET', fastapiIntegration);
-    const docsPath = lambdaApi.root.addResource('docs');
-    docsPath.addMethod('GET', fastapiIntegration);
-    const openapiPath = lambdaApi.root.addResource('openapi.json');
-    openapiPath.addMethod('GET', fastapiIntegration);
-
-    const userPath = lambdaApi.root.addResource('user');
-    userPath.addMethod('GET');
-    userPath.addMethod('POST');
-    const userIdPath = userPath.addResource('{id}');
-    userIdPath.addMethod('GET');
-    userIdPath.addMethod('PUT');
-    userIdPath.addMethod('PATCH');
-    userIdPath.addMethod('DELETE');
-
-    const helloPath = lambdaApi.root.addResource('hello');
-    helloPath.addMethod('GET', new apigateway.LambdaIntegration(helloLambda));
   }
 }
